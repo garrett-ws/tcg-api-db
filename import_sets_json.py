@@ -5,12 +5,16 @@ import fnmatch
 from dotenv import load_dotenv
 from pymongo import MongoClient, InsertOne
 
+# This file is a modified version of the import file provided by MongoDB in
+# their help article and can be found at:
+# https://www.mongodb.com/resources/languages/json-to-mongodb#how-to-import-json-into-mongodb-using-python
+
 # The Connection string, Database, and Collection can be updated in the .env file
 load_dotenv()
 
 client = pymongo.MongoClient(os.getenv("MONGO_DB_CONNECTION_STRING"))
 db = client[os.getenv("MONGO_DATABASE")] # Change the Database as needed
-collection = db[os.getenv("MONGO_COLLECTION")] # Change the Collection as needed
+collection = db[os.getenv("MONGO_COLLECTION_SETS")] # Change the Collection as needed
 requesting = []
 
 pattern = "*sets.json"
