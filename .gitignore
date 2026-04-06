@@ -1,0 +1,5 @@
+.env
+Notes/
+Tests/
+curl_output/
+json_exports/
