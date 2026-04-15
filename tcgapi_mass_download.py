@@ -4,14 +4,20 @@ import os
 
 # Base URL
 BASE_URL = "https://tcgtracking.com/tcgapi/v1"
+filepath = "json_exports"
 
 # Get all categories
 category_data = requests.get(f"{BASE_URL}/categories").json()
 categories = [cat["id"] for cat in category_data["categories"]]
 sets = {}
 
+os.makedirs(filepath, exist_ok=True)
+with open(f"{filepath}/categories.json", "w") as f:
+    json.dump(category_data, f)
+
+input("Press enter to continue...")
+
 # Get all sets for each category
-filepath = "json_exports"
 for id in categories:    
     sets_data = requests.get(f"{BASE_URL}/{id}/sets").json()
     sets.update({tcg_set["id"]: sets_data["category_id"] for tcg_set in sets_data["sets"]})
