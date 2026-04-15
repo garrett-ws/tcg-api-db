@@ -15,8 +15,6 @@ os.makedirs(filepath, exist_ok=True)
 with open(f"{filepath}/categories.json", "w") as f:
     json.dump(category_data, f)
 
-input("Press enter to continue...")
-
 # Get all sets for each category
 for id in categories:    
     sets_data = requests.get(f"{BASE_URL}/{id}/sets").json()
