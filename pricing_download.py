@@ -97,21 +97,30 @@ def getPricing(cat_num):
             print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} sets that did not have data.")
             progress = 0
 
-
+print("Gathering category information...")  # Terminal msg because the program takes awhile
 # Get all categories
 category_data = requests.get(f"{BASE_URL}/categories").json()
 categories = [cat["id"] for cat in category_data["categories"]]
 sets = {}
 
+print("Collecting set information...") # Terminal msg because the program takes awhile
 # Get all sets for each category
 for id in categories:    
     sets_data = requests.get(f"{BASE_URL}/{id}/sets").json()
     sets.update({tcg_set["id"]: sets_data["category_id"] for tcg_set in sets_data["sets"]})
 
 # Get all SKUs for each set
+print("Begin downloading SKUs...")
+print("Downloading SKUs for Magig The Gathering...")
 getSKUs(1) # Get Magic SKUs
+print("Downloading SKUs for Pokemon...")
 getSKUs(3) # Get Pokemon SKUs
+print("Finished downloading SKUs!")
 
 # Get pricing data for each set
+print("Begin downloading pricing data...")
+print("Downloading pricing data for Magig The Gathering...")
 getPricing(1) # Get Magic pricing
+print("Downloading pricing data for Pokemon...")
 getPricing(3) # Get Pokemon pricing
+print("Finished downloading pricing data!")
