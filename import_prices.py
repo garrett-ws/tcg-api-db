@@ -30,12 +30,6 @@ with os.scandir(filepath) as entries:
                 with open(entry, 'r') as f:
                     data = json.load(f)
 
-                    # This JSON is a nested dictionary
-                    # product = outer key
-                    # price_source = outer value/inner key
-                        # the price source varies by product and tcg
-                    # tcg_price_details = inner value
-
                     for product, tcg_price in data["prices"].items():                        
                         tcg_price["set_id"] = data["set_id"]
                         tcg_price["updated"] = data["updated"]
