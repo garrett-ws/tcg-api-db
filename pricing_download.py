@@ -27,7 +27,7 @@ def getSKUs(cat_num):
     Returns:
     The exported JSON files.
     """
-    skus = {}
+
     skusDownloaded = 0
     skusSkipped = 0
     progress = 0 # Track progress of downloads for terminal updates
@@ -51,10 +51,51 @@ def getSKUs(cat_num):
         progress += 1
         # Print a periodic progress update on the download
         if progress > BATCH:
-            print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} that did not have data.")
+            print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} sets that did not have data.")
             progress = 0
 
+def getPricing(cat_num):
+    """
+    Gets all the SKUs for the given category and exports the results to a JSON file
+    in the format of:
+    
+    YYYY-MM-DD_catNum_productNum_pricing.json
 
+    Where the data is when the pricing information was last updated.
+
+    Parameters:
+    cat_num: The category number to get the pricing for
+
+    Returns:
+    The exported JSON files.
+    """
+
+    pricingDownloaded = 0
+    pricingSkipped = 0
+    progress = 0 # Track progress of downloads for terminal updates
+    for product in sets:
+        pricing_data = requests.get(f"{BASE_URL}/{cat_num}/sets/{product}/pricing").json()
+        
+        print("debug", pricingSkipped, pricingDownloaded)
+        # Don't export sets that don't match the category (ie: don't actually exist)
+        if "error" not in pricing_data:
+            datetimeUpdated  = pricing_data["updated"]
+            datetimeUpdated = parse(datetimeUpdated)
+            dateUpdated = datetimeUpdated.date()
+            print("debug", dateUpdated)
+            os.makedirs(filepath, exist_ok=True)
+            with open(f"{filepath}/{dateUpdated}_{cat_num}_{product}_pricing.json", "w") as f:
+                json.dump(pricing_data, f)
+            
+            pricingDownloaded += 1
+        else:
+            pricingSkipped += 1
+
+        progress += 1
+        # Print a periodic progress update on the download
+        if progress > BATCH:
+            print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} sets that did not have data.")
+            progress = 0
 
 
 # Get all categories
@@ -68,8 +109,9 @@ for id in categories:
     sets.update({tcg_set["id"]: sets_data["category_id"] for tcg_set in sets_data["sets"]})
 
 # Get all SKUs for each set
-#getSKUs(3) # Get Pokemon SKUs
-#getSKUs(1) # Get Magic SKUs
+getSKUs(1) # Get Magic SKUs
+getSKUs(3) # Get Pokemon SKUs
 
 # Get pricing data for each set
+getPricing(1) # Get Magic pricing
 getPricing(3) # Get Pokemon pricing
