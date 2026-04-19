@@ -77,13 +77,12 @@ def getPricing(cat_num):
     for product in sets:
         pricing_data = requests.get(f"{BASE_URL}/{cat_num}/sets/{product}/pricing").json()
         
-        print("debug", pricingSkipped, pricingDownloaded)
         # Don't export sets that don't match the category (ie: don't actually exist)
         if "error" not in pricing_data:
             datetimeUpdated  = pricing_data["updated"]
             datetimeUpdated = parse(datetimeUpdated)
             dateUpdated = datetimeUpdated.date()
-            print("debug", dateUpdated)
+            
             os.makedirs(filepath, exist_ok=True)
             with open(f"{filepath}/{dateUpdated}_{cat_num}_{product}_pricing.json", "w") as f:
                 json.dump(pricing_data, f)
