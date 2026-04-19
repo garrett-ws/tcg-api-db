@@ -51,7 +51,8 @@ def getSKUs(cat_num):
         progress += 1
         # Print a periodic progress update on the download
         if progress > BATCH:
-            print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} sets that did not have data.")
+            print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} \
+                  sets that did not have data so far. Continuing download...")
             progress = 0
 
 def getPricing(cat_num):
@@ -94,7 +95,8 @@ def getPricing(cat_num):
         progress += 1
         # Print a periodic progress update on the download
         if progress > BATCH:
-            print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} sets that did not have data.")
+            print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} \
+                  sets that did not have data so far. Continuing download...")
             progress = 0
 
 print("Gathering category information...")  # Terminal msg because the program takes awhile
@@ -111,7 +113,7 @@ for id in categories:
 
 # Get all SKUs for each set
 print("Begin downloading SKUs...")
-print("Downloading SKUs for Magig The Gathering...")
+print("Downloading SKUs for Magic The Gathering...")
 getSKUs(1) # Get Magic SKUs
 print("Downloading SKUs for Pokemon...")
 getSKUs(3) # Get Pokemon SKUs
@@ -119,7 +121,7 @@ print("Finished downloading SKUs!")
 
 # Get pricing data for each set
 print("Begin downloading pricing data...")
-print("Downloading pricing data for Magig The Gathering...")
+print("Downloading pricing data for Magic The Gathering...")
 getPricing(1) # Get Magic pricing
 print("Downloading pricing data for Pokemon...")
 getPricing(3) # Get Pokemon pricing
