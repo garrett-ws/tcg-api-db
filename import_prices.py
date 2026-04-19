@@ -14,10 +14,11 @@ load_dotenv()
 
 client = pymongo.MongoClient(os.getenv("MONGO_DB_CONNECTION_STRING"))
 db = client[os.getenv("MONGO_DATABASE")] # Change the Database as needed
-collection = db[os.getenv("MONGO_COLLECTION_SKUS")] # Change the Collection as needed
+collection = db[os.getenv("MONGO_COLLECTION_PRICES")] # Change the Collection as needed
 requesting = []
 
-pattern = "*skus.json"
+# the tcgapi and output files use "pricing", while the DB uses "prices"
+pattern = "*pricing.json"
 filepath = "json_exports"
 BATCH_SIZE = 1000
 total = 0
@@ -31,15 +32,15 @@ with os.scandir(filepath) as entries:
 
                     # This JSON is a nested dictionary
                     # product = outer key
-                    # listing = outer value/inner key
-                    # tcg_sku = inner value
-                    for product, listing_val in data["products"].items():
-                        for listing_key, tcg_sku in listing_val.items():
-                             tcg_sku["set_id"] = data["set_id"]
-                             tcg_sku["updated"] = data["updated"]
-                             tcg_sku["product"] = product
-                             tcg_sku["listing"] = listing_key
-                             requesting.append(InsertOne(tcg_sku))
+                    # price_source = outer value/inner key
+                        # the price source varies by product and tcg
+                    # tcg_price_details = inner value
+
+                    for product, tcg_price in data["prices"].items():                        
+                        tcg_price["set_id"] = data["set_id"]
+                        tcg_price["updated"] = data["updated"]
+                        tcg_price["product"] = product
+                        requesting.append(InsertOne(tcg_price))
 
                     if len(requesting) >= BATCH_SIZE:
                         collection.bulk_write(requesting)
@@ -48,7 +49,7 @@ with os.scandir(filepath) as entries:
                         print(f"Inserted {total} records thus far...")
 
             except Exception as e:
-                print(f"Skipped {entry.name}: Does the set have any SKUs?")
+                print(f"Skipped {entry.name}: Does the set have any price information?")
 
 if requesting:
     collection.bulk_write(requesting)

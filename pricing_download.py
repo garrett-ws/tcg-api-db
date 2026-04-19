@@ -52,7 +52,7 @@ def getSKUs(cat_num):
         # Print a periodic progress update on the download
         if progress > BATCH:
             print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} \
-                  sets that did not have data so far. Continuing download...")
+                  sets that did not have data thus far. Continuing download...")
             progress = 0
 
 def getPricing(cat_num):
@@ -96,7 +96,7 @@ def getPricing(cat_num):
         # Print a periodic progress update on the download
         if progress > BATCH:
             print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} \
-                  sets that did not have data so far. Continuing download...")
+                  sets that did not have data thus far. Continuing download...")
             progress = 0
 
 print("Gathering category information...")  # Terminal msg because the program takes awhile
