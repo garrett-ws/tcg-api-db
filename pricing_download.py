@@ -41,18 +41,25 @@ def getSKUs(cat_num):
             dateUpdated = datetimeUpdated.date()
             
             os.makedirs(filepath, exist_ok=True)
-            with open(f"{filepath}/{dateUpdated}_{cat_num}_{product}_skus.json", "w") as f:
-                json.dump(skus_data, f)
+            path_name = f"{filepath}/{dateUpdated}_{cat_num}_{product}_skus.json"
+            if not os.path.exists(path_name):
+                with open(path_name, "w") as f:
+                    json.dump(skus_data, f)
+                
+                skusDownloaded += 1
+
+            else:
+                # print(f"Skipped set {product}, data already downloaded")
+                skusSkipped += 1
             
-            skusDownloaded += 1
         else:
             skusSkipped += 1
 
         progress += 1
         # Print a periodic progress update on the download
         if progress > BATCH:
-            print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} \
-                  sets that did not have data thus far. Continuing download...")
+            print(f"Downloaded SKUs for {skusDownloaded} sets and skipped {skusSkipped} "
+                  "sets that were previously downloaded or did not have data thus far. \nContinuing download...")
             progress = 0
 
 def getPricing(cat_num):
@@ -84,18 +91,23 @@ def getPricing(cat_num):
             dateUpdated = datetimeUpdated.date()
             
             os.makedirs(filepath, exist_ok=True)
-            with open(f"{filepath}/{dateUpdated}_{cat_num}_{product}_pricing.json", "w") as f:
-                json.dump(pricing_data, f)
+            path_name = f"{filepath}/{dateUpdated}_{cat_num}_{product}_pricing.json"
+            if not os.path.exists(path_name):
+                with open(path_name, "w") as f:
+                    json.dump(pricing_data, f)
+                    pricingDownloaded += 1
+            else:
+                # print(f"Skipped set {product}, data already downloaded")
+                pricingSkipped += 1
             
-            pricingDownloaded += 1
         else:
             pricingSkipped += 1
 
         progress += 1
         # Print a periodic progress update on the download
         if progress > BATCH:
-            print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} \
-                  sets that did not have data thus far. Continuing download...")
+            print(f"Downloaded pricing data for {pricingDownloaded} sets and skipped {pricingSkipped} "
+                  "sets that were previously downloaded or did not have data thus far. \nContinuing download...")
             progress = 0
 
 print("Gathering category information...")  # Terminal msg because the program takes awhile
@@ -116,6 +128,8 @@ print("Downloading SKUs for Magic The Gathering...")
 getSKUs(1) # Get Magic SKUs
 print("Downloading SKUs for Pokemon...")
 getSKUs(3) # Get Pokemon SKUs
+print("Downloading SKUs for Japanese Pokemon...")
+getSKUs(85) # Get Japanese Pokemon SKUs
 print("Finished downloading SKUs!")
 
 # Get pricing data for each set
@@ -124,4 +138,6 @@ print("Downloading pricing data for Magic The Gathering...")
 getPricing(1) # Get Magic pricing
 print("Downloading pricing data for Pokemon...")
 getPricing(3) # Get Pokemon pricing
+print("Downloading pricing data for Japanese Pokemon...")
+getPricing(85) # Get Japanese Pokemon pricing
 print("Finished downloading pricing data!")
