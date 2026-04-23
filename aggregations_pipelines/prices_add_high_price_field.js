@@ -7,7 +7,7 @@
 
 // Adds the highest price and highest price 
 db.prices.updateMany(
-  {},
+  {tcg_high_price: { $eq: null }},
   [{
     $set: { 
       tcg_high_price: { $max: [
