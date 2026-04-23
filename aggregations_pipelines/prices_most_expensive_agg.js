@@ -82,7 +82,8 @@
           updated: "$updated"
         }
       },
-      // Write the documents to the target collection (this will overwrite existing collections)
+      // Write the documents to the target collection (this will
+      // overwrite existing collections)
       {
         $out: "prices_most_expensive"
       }  
