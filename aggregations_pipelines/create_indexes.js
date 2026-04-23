@@ -11,7 +11,7 @@
 // This index is for the older version of the pipeline
 // If the pipeline is successfully updated then this can be dropped
 db.prices.createIndex(  
-  { "tcg.Normal.low": 1, "set_id": -1, "product_id": 1 },
+  { "tcg.normal.low": 1, "set_id": -1, "product_id": 1 },
   { name: "idx_prices_legacy_pipeline" }
 )
 
@@ -39,7 +39,7 @@ db.prices.createIndex(
 // This index is for the older version of the pipeline
 // If the pipeline is successfully updated then this can be dropped
 db.prices_current.createIndex(  
-  { "tcg.Normal.low": 1, "set_id": -1, "product_id": 1 },
+  { "tcg.normal.low": 1, "set_id": -1, "product_id": 1 },
   { name: "idx_prices_legacy_pipeline" }
 )
 

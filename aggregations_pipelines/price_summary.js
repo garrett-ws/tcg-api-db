@@ -3,14 +3,17 @@
    * Performs a $lookup on the db.products and db.sets collections return more info about the cards found in db.prices
    * $projects the data collected into new objects and writes it to a target collection 
    * 
+   * Prerequisites:
+   *  1). create_indexes.js
+   * 
    * @returns db.price_most_expensive collection, populated with objects containing info about the higest priced card per set
    * 
    */
 
   db.prices_current.aggregate([  
  
-    // Filter out cards that don't have a tcg_high_price, usually these products only have
-    // data on another tcg market platform instead of tcgplayer
+    // Filter out cards that don't have a tcg_high_price, most likely these products
+    //  only have data on another tcg market platform instead of tcgplayer
     {
       $match: { tcg_high_price: { $ne:  null }}
     },      
