@@ -20,6 +20,9 @@ db.prices.updateMany(
         "$tcg.unlimited.low", "$tcg.unlimited.market",
         "$tcg.unlimited_holofoil.low", "$tcg.unlimited_holofoil.market"
       ]},
+      // There's probably a better way to do this, but it works.
+      // Check what printing the $max value card has and assign the same printing to
+      // a new field tcg_high_price_printing for later pipeline aggregation
       tcg_high_price_printing: {
         $switch: {
           branches: [
