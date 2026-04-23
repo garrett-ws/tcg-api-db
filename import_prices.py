@@ -19,7 +19,7 @@ requesting = []
 
 # the tcgapi and output files use "pricing", while the DB uses "prices"
 pattern = "*pricing.json"
-filepath = "json_exports_pricing_subset"
+filepath = "json_exports"
 BATCH_SIZE = 1000
 total = 0
 with os.scandir(filepath) as entries:

@@ -5,7 +5,7 @@ from dateutil.parser import parse # if not installed then: pip install python-da
 
 # Base URL
 BASE_URL = "https://tcgtracking.com/tcgapi/v1"
-filepath = "json_exports_pricing_subset"
+filepath = "json_exports"
 BATCH = 100
 
 # Download pricing and SKUs for just Magic and Pokemon
