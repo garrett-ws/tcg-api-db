@@ -3,23 +3,12 @@
    * Performs a $lookup on the db.products and db.sets collections return more info about the cards found in db.prices
    * $projects the data collected into new objects and writes it to a target collection 
    * 
-   * @returns db.price_summary collection, populated with objects containing info about the higest priced card per set
+   * @returns db.price_most_expensive collection, populated with objects containing info about the higest priced card per set
    * 
    */
 
-  db.prices.aggregate([  
-    // Sort and group to get just the most recent price for each product listing
-    {
-      $sort: { date_updated: -1 }
-    },
-    {
-      $group: {
-        _id: "$product_id",
-        tcg_high_price: { $first: "$tcg_high_price" },
-        tcg_high_price_printing: { $first: "$tcg_high_price_printing" },
-        set_id: { $first: "$set_id" }
-      }
-    },
+  db.prices_current.aggregate([  
+ 
     // Filter out cards that don't have a tcg_high_price, usually these products only have
     // data on another tcg market platform instead of tcgplayer
     {
@@ -31,8 +20,8 @@
       _id: "$set_id",
       most_expensive: { 
         $top: {
-          sortBy: { tcg_high_price: -1 },
-          output: { price: "$tcg_high_price", product_id: "$_id", printing: "$tcg_high_price_printing" }
+          sortBy: { tcg_high_price: -1, date_updated: -1 },
+          output: { price: "$tcg_high_price", product_id: "$product_id", printing: "$tcg_high_price_printing" }
           }
         }
       }
@@ -87,5 +76,6 @@
     {
       $out: "prices_most_expensive_pre_agg"
     }  
-  ],   
+  ],  
+    { allowDiskUse: true }
 )

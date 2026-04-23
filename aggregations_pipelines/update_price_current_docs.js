@@ -5,26 +5,27 @@
  * as there are also indexes needed for other collections
  * 
  */
+
 // Renames the product field to product_id
-db.prices.updateMany(
+db.prices_current.updateMany(
   {},
   { $rename: { "product" : "product_id" } }
 )
 
 // Change the product_id field from a string to an int
-db.prices.updateMany(
+db.prices_current.updateMany(
   {},
   [{ $set: { product_id: { $toInt: "$product_id" } } }]
 )
 
 // Renames the tcg.Reverse Holofoil to remove the space
-db.prices.updateMany(
+db.prices_current.updateMany(
   {},
   { $rename: { "tcg.Reverse Holofoil": "tcg.Reverse_Holofoil" } }
 )
 
 // Adds the highest price and highest price 
-db.prices.updateMany(
+db.prices_current.updateMany(
   {},
   [{
     $set: { 
