@@ -1,8 +1,14 @@
 /**
  * Various fixes for the field names from when they are imported
  * 
- * Many fields on import are named simply "id" for a collection, which is confusing when performing a $lookup
- * This renames the fields
+ * 1). Many fields on import are named simply "id" for a collection, which is confusing when performing a $lookup
+ * This renames the fields to a more clearly identifiable name
+ * 
+ * 2). Some field names are imported with uppercase letters and/or spaces, these field names are normalized to all
+ * lowercase, with underscores replacing whitespace
+ * 
+ * 3). A few fields import as a String, despite that they should be an Int. These fields are converted to an Int  
+ * 
  */
 
 /**
