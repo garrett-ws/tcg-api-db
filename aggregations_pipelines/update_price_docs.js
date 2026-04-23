@@ -1,27 +1,12 @@
 /**
  * Various updates to the db.prices_current needed before the aggregation pipeline can be run
  * 
- * Not that the indexes must also be created, these are stored in the create_indexes.js file,
+ * Prerequisites: field_corrections.js must be run first to update field names and correct data types
+ * 
+ * Note: that the indexes must also be created, these are stored in the create_indexes.js file,
  * as there are also indexes needed for other collections
  * 
  */
-// Renames the product field to product_id
-db.prices.updateMany(
-  {},
-  { $rename: { "product" : "product_id" } }
-)
-
-// Change the product_id field from a string to an int
-db.prices.updateMany(
-  {},
-  [{ $set: { product_id: { $toInt: "$product_id" } } }]
-)
-
-// Renames the tcg.Reverse Holofoil to remove the space
-db.prices.updateMany(
-  {},
-  { $rename: { "tcg.Reverse Holofoil": "tcg.Reverse_Holofoil" } }
-)
 
 // Adds the highest price and highest price 
 db.prices.updateMany(
