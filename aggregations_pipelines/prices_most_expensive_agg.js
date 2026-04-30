@@ -11,17 +11,34 @@
      *        indexes can be created for these new fields (as needed)
      *  3). create_indexes.js must have run successfully to create the indexes, else the pipeline will time out
      * 
-     * @returns db.price_most_expensive collection, populated with objects containing info about the higest priced card per set
+     * @returns db.prices_most_expensive collection, populated with objects containing info about the higest priced card per set
      * 
      */
 
     db.prices_current.aggregate([  
   
       // Filter out cards that don't have a tcg_high_price, most likely these products
-      //  only have data on another tcg market platform instead of tcgplayer
+      // only have data on another tcg market platform instead of tcgplayer
       {
         $match: { tcg_high_price: { $ne:  null }}
-      },      
+      },
+      // Filter out non-card products
+      // Join the db.products collection to db.prices
+      {
+        $lookup: {
+          from: "products",
+          localField: "product_id",
+          foreignField: "product_id",
+          as: "product"
+        }
+      },
+      {
+        $unwind: "$product"
+      },
+      // All cards have a product number, so anything that is null is a non-card product
+      {
+        $match: { "product.number": { $ne: null } }
+      },
       // Group and sort the highest priced products per set  
       {
       $group: {
@@ -54,10 +71,6 @@
       },
       {
         $unwind: "$product"
-      },
-      // Filter out sealed products
-      {
-        $match: { "product.number": { $ne: null } }
       },
       // Join the db.sets collection to db.prices
       {
