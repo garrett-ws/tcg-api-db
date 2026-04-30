@@ -45,7 +45,7 @@
         _id: "$set_id",
         most_expensive: { 
           $top: {
-            sortBy: { tcg_high_price: -1, date_updated: -1 },
+            sortBy: { tcg_high_price: -1},
             output: { price: "$tcg_high_price", product_id: "$product_id", printing: "$tcg_high_price_printing", updated: "$updated"}
             }
           }
