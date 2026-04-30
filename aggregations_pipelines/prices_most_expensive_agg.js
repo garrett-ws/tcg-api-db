@@ -29,7 +29,7 @@
         most_expensive: { 
           $top: {
             sortBy: { tcg_high_price: -1, date_updated: -1 },
-            output: { price: "$tcg_high_price", product_id: "$product_id", printing: "$tcg_high_price_printing" }
+            output: { price: "$tcg_high_price", product_id: "$product_id", printing: "$tcg_high_price_printing", updated: "$updated"}
             }
           }
         }
@@ -39,7 +39,8 @@
         $set: {
           product_id: "$most_expensive.product_id",
           high_price: "$most_expensive.price",
-          printing: "$most_expensive.printing"
+          printing: "$most_expensive.printing",
+          updated: "$most_expensive.updated"
         }
       }, 
       // Join the db.products collection to db.prices
@@ -77,10 +78,12 @@
           price: "$high_price",
           card_name: "$product.name",
           set_name: "$set.name",
-          printing: "$printing"
+          printing: "$printing",
+          updated: "$updated"
         }
       },
-      // Write the documents to the target collection (this will overwrite existing collections)
+      // Write the documents to the target collection (this will
+      // overwrite existing collections)
       {
         $out: "prices_most_expensive"
       }  
